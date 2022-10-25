@@ -1,0 +1,17 @@
+---
+name: do entire deployment chain
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deployment-chain:
+    strategy:
+      matrix:
+        include:
+          - word: hello
+          - word: world
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      ENVIRONMENT: ${{ matrix.word }}
+    secrets: inherit
