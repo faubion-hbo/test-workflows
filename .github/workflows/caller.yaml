@@ -3,15 +3,32 @@ name: do entire deployment chain
 
 on:
   workflow_dispatch:
+    inputs:
+      do-int:
+        description: whether to deploy to integration environment
+        type: boolean
+        default: false
+      do-prod:
+        description: whether to deploy to production environment
+        type: boolean
+        default: false
 
 jobs:
-  deployment-chain:
-    strategy:
-      matrix:
-        include:
-          - word: hello
-          - word: world
+  deploy-dev:
     uses: ./.github/workflows/deploy.yaml
+    environment: dev
     with:
       ENVIRONMENT: ${{ matrix.word }}
+    secrets: inherit
+
+  deploy-int:
+    if: ${{ github.event.inputs.do-int == 'true' }}
+    uses: ./.github/workflows/deploy.yaml
+    environment: int
+    secrets: inherit
+
+  deploy-prod:
+    if: ${{ github.event.inputs.do-prod == 'true' }}
+    uses: ./.github/workflows/deploy.yaml
+    environment: prod
     secrets: inherit
