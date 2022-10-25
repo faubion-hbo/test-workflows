@@ -3,19 +3,21 @@ name: deploy to environment
 
 on:
   workflow_call:
-#    inputs:
-#      ENVIRONMENT:
-#        description: Which environment to do deployment
-#        required: true
-#        type: string
+    inputs:
+      ENVIRONMENT:
+        description: Which environment to do deployment
+        required: true
+        type: string
 
-#concurrency:
-#  group: ${{ inputs.ENVIRONMENT }}
-#  cancel-in-progress: false
+concurrency:
+  group: ${{ inputs.ENVIRONMENT }}
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    name: "deploying to: ${{ inputs.ENVIRONMENT }}"
     runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
     steps:
       - name: Dump GitHub context
         run: |

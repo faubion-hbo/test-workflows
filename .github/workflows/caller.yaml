@@ -16,19 +16,20 @@ on:
 jobs:
   deploy-dev:
     uses: ./.github/workflows/deploy.yaml
-    environment: dev
     with:
-      ENVIRONMENT: ${{ matrix.word }}
+      ENVIRONMENT: dev
     secrets: inherit
 
   deploy-int:
     if: ${{ github.event.inputs.do-int == 'true' }}
     uses: ./.github/workflows/deploy.yaml
-    environment: int
+    with:
+      ENVIRONMENT: int
     secrets: inherit
 
   deploy-prod:
-    if: ${{ github.event.inputs.do-prod == 'true' }}
+    if: ${{ github.event.inputs.do-int == 'true' && github.event.inputs.do-prod == 'true' }}
     uses: ./.github/workflows/deploy.yaml
-    environment: prod
+    with:
+      ENVIRONMENT: prod
     secrets: inherit
